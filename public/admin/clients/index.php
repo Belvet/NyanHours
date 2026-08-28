@@ -9,7 +9,7 @@ $flashes = consumeFlashes();
 ?>
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Clientes | NyanHours</title><link rel="stylesheet" href="/assets/css/app.css"></head><body class="app-layout"><?php renderSidebar($user); ?>
 <header class="topbar"><a class="brand" href="/dashboard.php">NyanHours</a><nav class="actions"><a class="button-secondary" href="/admin/">Administración</a><a class="button" href="/admin/clients/create.php">Nuevo cliente</a></nav></header>
-<main class="container"><h1>Clientes</h1><p class="muted">Definí qué clientes estarán disponibles al registrar horas.</p>
+<main class="container"><div class="page-heading"><div><h1>Clientes</h1><p class="muted">Definí qué clientes estarán disponibles al registrar horas.</p></div><a class="button" href="/admin/clients/create.php">Nuevo cliente</a></div>
 <?php foreach ($flashes as $message): ?><div class="alert alert-<?= e($message['type']) ?>"><?= e($message['message']) ?></div><?php endforeach; ?>
 <section class="panel table-wrap">
 <?php if ($clients === []): ?><div class="empty-state"><h2>Todavía no hay clientes</h2><p>Creá el primero para comenzar a registrar horas.</p><a class="button" href="/admin/clients/create.php">Crear cliente</a></div>
