@@ -5,57 +5,57 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=111)
 ![Status](https://img.shields.io/badge/status-MVP-5046E5)
 
-Aplicación web de gestión de horas para equipos pequeños. Combina una planilla semanal con un registro detallado de actividades, inspirándose en la experiencia de Clockify sin depender de frameworks.
+NyanHours is a lightweight time-tracking web application for small teams. It combines a weekly timesheet with detailed activity tracking, inspired by Clockify while remaining framework-free and easy to deploy on traditional PHP hosting.
 
-## Características
+## Features
 
-- Timesheet semanal por cliente con navegación entre semanas.
-- Time Tracker con múltiples actividades por día y cliente.
-- Edición inline de actividades y duraciones.
-- Duraciones inteligentes: `130`, `1:3` y `1.5` se normalizan a `1:30`.
-- Sincronización automática entre Timesheet y Time Tracker.
-- Clientes identificados por colores personalizables.
-- Roles `ADMIN` y `OPERADOR` con autorización en el backend.
-- Gestión de usuarios, tarifas por hora y estados de cuenta.
-- Gestión de clientes activos e inactivos.
-- Reportes con totales por persona, cliente y actividad.
-- Protección CSRF, sesiones seguras, PDO y contraseñas con `password_hash()`.
-- Interfaz responsive con navegación lateral persistente.
-- Interfaz bilingüe español/inglés con preferencia persistente.
+- Weekly client-based timesheet with week navigation.
+- Detailed Time Tracker with multiple activities per day and client.
+- Inline editing for activity descriptions and durations.
+- Smart duration parsing: `130`, `1:3`, and `1.5` are normalized to `1:30`.
+- Automatic synchronization between Timesheet and Time Tracker.
+- Custom color identification for each client.
+- `ADMIN` and `OPERATOR` roles with server-side authorization.
+- User management, hourly rates, and account activation controls.
+- Active and inactive client management.
+- Reports grouped by team member, client, and activity.
+- CSRF protection, secure sessions, PDO, and password hashing.
+- Responsive interface with persistent sidebar navigation.
+- Spanish and English interface with a persistent language preference.
 
-## Stack
+## Tech stack
 
-| Capa | Tecnología |
+| Layer | Technology |
 | --- | --- |
 | Backend | PHP 8.2+ |
-| Base de datos | MySQL 8 / Percona 8 / MariaDB 10.4+ |
-| Frontend | HTML5, CSS3 y JavaScript vanilla |
-| Acceso a datos | PDO con consultas preparadas |
+| Database | MySQL 8 / Percona Server 8 / MariaDB 10.4+ |
+| Frontend | HTML5, CSS3, and vanilla JavaScript |
+| Data access | PDO with prepared statements |
 
-No utiliza React, Vue, Laravel ni dependencias de Composer o npm.
+The project does not require React, Vue, Laravel, Composer, or npm dependencies.
 
-## Estructura
+## Project structure
 
 ```text
 NyanHours/
-├── app/                 # Autenticación, seguridad, helpers y repositorios
-├── config/              # Plantilla de configuración privada
-├── database/            # Esquema, migraciones y scripts CLI
-├── public/              # Raíz web, pantallas y assets
-│   ├── admin/           # Gestión y reportes administrativos
-│   ├── assets/          # CSS y JavaScript
-│   └── time-entries/    # Acciones sobre registros de tiempo
-└── storage/             # Archivos locales no públicos
+├── app/                 # Authentication, security, helpers, and repositories
+├── config/              # Private configuration template
+├── database/            # Schema, migrations, and CLI scripts
+├── public/              # Web root, application pages, and assets
+│   ├── admin/           # Administrative management and reports
+│   ├── assets/          # CSS and JavaScript
+│   └── time-entries/    # Time-entry actions and endpoints
+└── storage/             # Local non-public files
 ```
 
-## Instalación local
+## Local installation
 
-### Requisitos
+### Requirements
 
-- PHP 8.2 o superior con `pdo_mysql`.
-- MySQL 8, Percona Server 8 o MariaDB 10.4+.
+- PHP 8.2 or newer with the `pdo_mysql` extension.
+- MySQL 8, Percona Server 8, or MariaDB 10.4+.
 
-### 1. Crear la base
+### 1. Create the database
 
 ```sql
 CREATE DATABASE nyan_hours
@@ -63,58 +63,60 @@ CREATE DATABASE nyan_hours
     COLLATE utf8mb4_unicode_ci;
 
 CREATE USER 'nyan_hours_user'@'localhost'
-    IDENTIFIED BY 'una-clave-local-segura';
+    IDENTIFIED BY 'your-secure-local-password';
 
 GRANT ALL PRIVILEGES ON nyan_hours.*
     TO 'nyan_hours_user'@'localhost';
 ```
 
-Importar [`database/schema.sql`](database/schema.sql) dentro de `nyan_hours`.
+Import [`database/schema.sql`](database/schema.sql) into the `nyan_hours` database.
 
-### 2. Configurar la conexión
+### 2. Configure the connection
 
 ```powershell
 Copy-Item config/config.example.php config/config.local.php
 ```
 
-Completar la copia con los datos locales. `config/config.local.php` está ignorado por Git y nunca debe publicarse.
+Complete the copied file with your local database settings. `config/config.local.php` is ignored by Git and must never be committed.
 
-### 3. Crear el primer administrador
+### 3. Create the first administrator
 
 ```powershell
-php database/seed-admin.php admin@example.com "una-contraseña-segura" "Administrador"
+php database/seed-admin.php admin@example.com "a-secure-password" "Administrator"
 ```
 
-### 4. Ejecutar
+### 4. Run the application
 
 ```powershell
 php -S 127.0.0.1:8080 -t public
 ```
 
-Abrir [http://127.0.0.1:8080](http://127.0.0.1:8080).
+Open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
-## Seguridad
+## Security
 
-- Hash de contraseñas mediante `password_hash()` y `password_verify()`.
-- Consultas preparadas y emulación desactivada en PDO.
-- Tokens CSRF para operaciones que modifican datos.
-- Escape de HTML para prevenir XSS.
-- Regeneración del ID de sesión al iniciar sesión.
-- Comprobación de propiedad: cada usuario solamente modifica sus registros.
-- Restricciones administrativas aplicadas en el servidor, no solo en la interfaz.
-- Credenciales locales excluidas del repositorio.
+- Password hashing with `password_hash()` and verification with `password_verify()`.
+- Prepared statements with native PDO emulation disabled.
+- CSRF tokens for state-changing operations.
+- HTML escaping to mitigate XSS.
+- Session ID regeneration after authentication.
+- Ownership checks so users can only modify their own entries.
+- Administrative permissions enforced on the server, not only in the UI.
+- Local credentials excluded from version control.
 
-## Estado del proyecto
+## Project status
 
-NyanHours se encuentra en desarrollo activo. El MVP incluye autenticación, roles, clientes, Timesheet, Time Tracker y reportes. Próximas etapas previstas:
+NyanHours is under active development. The current MVP includes authentication, roles, client management, weekly timesheets, detailed time tracking, inline editing, bilingual navigation, and administrative reports.
 
-- Filtros avanzados y rangos de fechas.
-- Cálculo de pagos según tarifa.
-- Exportación CSV.
-- Cierre y reapertura de períodos mensuales.
-- Pruebas automatizadas.
-- Despliegue en hosting tradicional con PHP-FPM.
+Planned improvements:
 
-## Autor
+- Advanced filters and custom date ranges.
+- Payment calculations based on hourly rates.
+- CSV export.
+- Monthly period closing and reopening.
+- Automated tests.
+- Deployment to traditional PHP-FPM hosting.
 
-Proyecto personal desarrollado como aplicación real de gestión interna y como parte de un portfolio de desarrollo web.
+## Author
+
+Personal project developed as a real-world internal management tool and as part of a web development portfolio.
