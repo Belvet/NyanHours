@@ -25,7 +25,7 @@ $flashes = consumeFlashes();
     </div>
 </header>
 <main class="container">
-    <div class="page-heading"><div><h1>Hola, <?= e($user['name']) ?></h1><p class="muted">Registrá y consultá tus horas trabajadas.</p></div><div class="actions"><a class="button" href="/time-tracker.php">Time Tracker</a><a class="button-secondary" href="/timesheet.php">Planilla semanal</a></div></div>
+    <div class="page-heading dashboard-heading"><div><h1>Hola, <?= e($user['name']) ?></h1><p class="muted">Registrá y consultá tus horas trabajadas.</p></div><img src="/assets/img/nyansei-mascot-hi.png" alt="" aria-hidden="true"><div class="actions"><a class="button" href="/time-tracker.php">Time Tracker</a><a class="button-secondary" href="/timesheet.php">Planilla semanal</a></div></div>
     <?php foreach ($flashes as $message): ?><div class="alert alert-<?= e($message['type']) ?>"><?= e($message['message']) ?></div><?php endforeach; ?>
     <div class="stats stats-single"><div class="stat"><strong><?= e(formatMinutes($totalMinutes)) ?></strong><span>Tiempo total registrado</span></div></div>
     <section class="panel table-wrap">

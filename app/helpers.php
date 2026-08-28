@@ -71,7 +71,7 @@ function renderSidebar(array $user): void
     }
     ?>
     <aside class="app-sidebar">
-        <a class="sidebar-logo" href="/dashboard.php"><span>Nyan</span>Hours</a>
+        <a class="sidebar-logo" href="/dashboard.php" aria-label="NyanHours"><img src="/assets/img/nyansei-logo.png" alt="Nyansei Studio"><span>NyanHours</span></a>
         <nav class="sidebar-nav" aria-label="Navegación principal">
             <?php foreach ($links as [$href, $icon, $label]):
                 $active = $href === '/admin/' ? $path === '/admin/' : ($href === '/dashboard.php' ? $path === $href : str_starts_with($path, $href));

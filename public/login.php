@@ -42,8 +42,9 @@ $flashes = consumeFlashes();
 </head>
 <body class="login-page">
     <div class="login-language language-switcher" aria-label="Language selector"><button type="button" data-language="es">ES</button><button type="button" data-language="en">EN</button></div>
-<main class="login-card">
-    <div class="brand">NyanHours</div>
+<main class="login-shell">
+<section class="login-card">
+    <div class="login-brand"><img src="/assets/img/nyansei-logo.png" alt="Nyansei Studio"><span>NyanHours</span></div>
     <h1>Iniciar sesión</h1>
     <p class="muted">Ingresá con tu cuenta para registrar tus horas.</p>
     <?php foreach ($flashes as $message): ?>
@@ -58,6 +59,8 @@ $flashes = consumeFlashes();
         <input id="password" name="password" type="password" autocomplete="current-password" required>
         <button type="submit">Ingresar</button>
     </form>
+    </section>
+    <aside class="login-art" aria-hidden="true"><div><span>TIME TO CREATE</span><strong>Track the work.<br>Keep the magic.</strong></div><img src="/assets/img/nyansei-mascot-hi.png" alt=""></aside>
     </main>
     <script src="/assets/js/i18n.js?v=2" defer></script>
 </body>
