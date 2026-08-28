@@ -48,12 +48,13 @@ final class TimeEntryRepository
         return $this->pdo->query(
             "SELECT u.id AS user_id, u.name AS user_name, c.id AS client_id, c.name AS client_name,
                     c.color AS client_color, COALESCE(NULLIF(TRIM(te.description), ''), 'Sin actividad') AS activity,
-                    SUM(te.duration_minutes) AS total_minutes
+                    te.work_date, SUM(te.duration_minutes) AS total_minutes
              FROM time_entries te
              INNER JOIN users u ON u.id = te.user_id
              INNER JOIN clients c ON c.id = te.client_id
-             GROUP BY u.id, u.name, c.id, c.name, c.color, COALESCE(NULLIF(TRIM(te.description), ''), 'Sin actividad')
-             ORDER BY u.name, c.name, activity"
+             GROUP BY u.id, u.name, c.id, c.name, c.color, te.work_date,
+                      COALESCE(NULLIF(TRIM(te.description), ''), 'Sin actividad')
+             ORDER BY u.name, c.name, te.work_date DESC, activity"
         )->fetchAll();
     }
 

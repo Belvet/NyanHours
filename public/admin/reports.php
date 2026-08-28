@@ -13,7 +13,11 @@ foreach ($details as $row) {
     $people[$userId]['clients'][$clientId]['name']=$row['client_name'];
     $people[$userId]['clients'][$clientId]['color']=$row['client_color'];
     $people[$userId]['clients'][$clientId]['total']=($people[$userId]['clients'][$clientId]['total']??0)+$minutes;
-    $people[$userId]['clients'][$clientId]['activities'][]=['name'=>$row['activity'],'minutes'=>$minutes];
+    $people[$userId]['clients'][$clientId]['activities'][]=[
+        'name'=>$row['activity'],
+        'date'=>$row['work_date'],
+        'minutes'=>$minutes,
+    ];
     $grandTotal += $minutes;
 }
 ?>
@@ -26,7 +30,7 @@ foreach ($details as $row) {
 <?php else: ?><div class="report-tree">
 <?php foreach($people as $person):?><section class="person-report"><header><h2><?=e($person['name'])?></h2><strong><?=e(formatMinutes((int)$person['total']))?></strong></header>
 <?php foreach($person['clients'] as $client):?><div class="client-report"><div class="client-subtotal"><strong class="client-name" style="--client-color:<?=e($client['color'])?>"><i></i><?=e($client['name'])?></strong><span>Subtotal: <strong><?=e(formatMinutes((int)$client['total']))?></strong></span></div>
-<?php foreach($client['activities'] as $activity):?><div class="activity-row"><span><?=e($activity['name'])?></span><strong><?=e(formatMinutes((int)$activity['minutes']))?></strong></div><?php endforeach;?>
+<?php foreach($client['activities'] as $activity):?><div class="activity-row"><span><?=e($activity['name'])?></span><time datetime="<?=e($activity['date'])?>"><?=e(date('d/m/Y',strtotime((string)$activity['date'])))?></time><strong><?=e(formatMinutes((int)$activity['minutes']))?></strong></div><?php endforeach;?>
 </div><?php endforeach;?></section><?php endforeach;?>
 </div><?php endif; ?>
 </section></main></body></html>
