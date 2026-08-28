@@ -59,6 +59,6 @@ $flashes = consumeFlashes();
         <button type="submit">Ingresar</button>
     </form>
     </main>
-    <script src="/assets/js/i18n.js?v=1" defer></script>
+    <script src="/assets/js/i18n.js?v=2" defer></script>
 </body>
 </html>

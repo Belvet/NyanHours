@@ -26,7 +26,7 @@
         });
     });
     const update = () => {
-        const columns = Array(7).fill(0);
+        const columns = Array(form.querySelectorAll('.day-total').length).fill(0);
         let week = 0;
         form.querySelectorAll('[data-client-row]').forEach((row) => {
             let rowTotal = 0;
