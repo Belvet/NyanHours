@@ -89,15 +89,25 @@ final class NyanHoursReportPdf extends FPDF
         $this->SetTextColor(255, 255, 255);
         $this->SetDrawColor(220, 216, 229);
         $this->SetFont('Helvetica', 'B', 9);
-        $this->Cell(36, 9, 'DATE', 1, 0, 'L', true);
-        $this->Cell(119, 9, 'TASK', 1, 0, 'L', true);
+        $this->Cell(155, 9, 'TASK', 1, 0, 'L', true);
         $this->Cell(35, 9, 'DURATION', 1, 1, 'R', true);
     }
 
-    public function reportRow(string $date, string $task, string $duration, bool $alternate): void
+    public function dayHeader(string $date, string $subtotal): void
+    {
+        if ($this->GetY() + 10 > 278) $this->AddPage();
+        $this->SetFillColor(232, 228, 243);
+        $this->SetTextColor(72, 65, 143);
+        $this->SetDrawColor(205, 199, 221);
+        $this->SetFont('Helvetica', 'B', 9);
+        $this->Cell(145, 9, 'DIA ' . $date, 1, 0, 'L', true);
+        $this->Cell(45, 9, 'Subtotal: ' . $subtotal, 1, 1, 'R', true);
+    }
+
+    public function reportRow(string $task, string $duration, bool $alternate): void
     {
         $lineHeight = 5.5;
-        $taskLines = $this->numberOfLines(115, $task);
+        $taskLines = $this->numberOfLines(151, $task);
         $rowHeight = max(10, $taskLines * $lineHeight + 3);
         if ($this->GetY() + $rowHeight > 278) $this->AddPage();
         $x = $this->GetX();
@@ -107,15 +117,12 @@ final class NyanHoursReportPdf extends FPDF
             $this->Rect($x, $y, 190, $rowHeight, 'F');
         }
         $this->SetDrawColor(220, 216, 229);
-        $this->Rect($x, $y, 36, $rowHeight);
-        $this->Rect($x + 36, $y, 119, $rowHeight);
+        $this->Rect($x, $y, 155, $rowHeight);
         $this->Rect($x + 155, $y, 35, $rowHeight);
         $this->SetTextColor(41, 40, 45);
         $this->SetFont('Helvetica', '', 9);
         $this->SetXY($x + 2, $y + 2.5);
-        $this->Cell(32, 5, $date);
-        $this->SetXY($x + 38, $y + 2.5);
-        $this->MultiCell(115, $lineHeight, $task, 0, 'L');
+        $this->MultiCell(151, $lineHeight, $task, 0, 'L');
         $this->SetXY($x + 157, $y + 2.5);
         $this->Cell(31, 5, $duration, 0, 0, 'R');
         $this->SetXY($x, $y + $rowHeight);
@@ -174,13 +181,19 @@ $pdf->logoPath = dirname(__DIR__) . '/assets/img/nyansei-logo.png';
 $pdf->SetTitle($pdf->reportTitle);
 $pdf->SetAuthor('NyanHours');
 $pdf->AddPage();
-foreach ($entries as $index => $entry) {
-    $pdf->reportRow(
-        date('d/m/Y', strtotime((string) $entry['work_date'])),
-        $pdfText((string) $entry['activity']),
-        $formatPdfDuration((int) $entry['total_minutes']),
-        $index % 2 === 1
-    );
+foreach (array_values(array_reduce($entries, static function (array $days, array $entry): array {
+    $days[(string) $entry['work_date']][] = $entry;
+    return $days;
+}, [])) as $dayEntries) {
+    $dayMinutes = array_sum(array_map(static fn (array $entry): int => (int) $entry['total_minutes'], $dayEntries));
+    $pdf->dayHeader(date('d/m/Y', strtotime((string) $dayEntries[0]['work_date'])), $formatPdfDuration($dayMinutes));
+    foreach ($dayEntries as $index => $entry) {
+        $pdf->reportRow(
+            $pdfText((string) $entry['activity']),
+            $formatPdfDuration((int) $entry['total_minutes']),
+            $index % 2 === 1
+        );
+    }
 }
 $safeClient = preg_replace('/[^A-Za-z0-9_-]+/', '_', iconv('UTF-8', 'ASCII//TRANSLIT', (string) $client['name']) ?: 'client');
 $pdf->Output('D', 'detailed_report_' . trim((string) $safeClient, '_') . '.pdf');
