@@ -192,6 +192,29 @@ final class TimeEntryRepository
         $statement->execute(['description'=>$description,'id'=>$id,'user_id'=>$userId]);
     }
 
+    public function updateActivityGroupByAdmin(
+        int $userId,
+        int $clientId,
+        string $date,
+        string $originalActivity,
+        string $newActivity
+    ): int {
+        $statement = $this->pdo->prepare(
+            "UPDATE time_entries
+             SET description = :new_activity, source = 'tracker'
+             WHERE user_id = :user_id AND client_id = :client_id AND work_date = :work_date
+               AND COALESCE(NULLIF(TRIM(description), ''), 'Sin actividad') = :original_activity"
+        );
+        $statement->execute([
+            'new_activity' => $newActivity,
+            'user_id' => $userId,
+            'client_id' => $clientId,
+            'work_date' => $date,
+            'original_activity' => $originalActivity,
+        ]);
+        return $statement->rowCount();
+    }
+
     public function updateDurationOwned(int $id, int $userId, int $minutes): void
     {
         $statement = $this->pdo->prepare(

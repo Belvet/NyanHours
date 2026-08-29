@@ -27,7 +27,7 @@ foreach ($details as $row) {
     $grandTotal += $minutes;
 }
 ?>
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Resumen de horas | NyanHours</title><link rel="stylesheet" href="/assets/css/app.css"></head><body class="app-layout"><?php renderSidebar($user); ?>
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="csrf-token" content="<?=e(csrfToken())?>"><title>Resumen de horas | NyanHours</title><link rel="stylesheet" href="/assets/css/app.css"></head><body class="app-layout"><?php renderSidebar($user); ?>
 <header class="topbar"><a class="brand" href="/dashboard.php">NyanHours</a><a class="button-secondary" href="/admin/">Administración</a></header>
 <main class="container"><div class="page-heading"><div><h1>Resumen de horas</h1><p class="muted">Tiempo acumulado por persona y cliente.</p></div></div>
 <form class="panel date-filter" method="get"><div><label for="date_from">Desde</label><input id="date_from" name="date_from" type="date" value="<?=e($dateFrom)?>"></div><div><label for="date_to">Hasta</label><input id="date_to" name="date_to" type="date" value="<?=e($dateTo)?>"></div><button type="submit">Filtrar</button><?php if($dateFrom!==''||$dateTo!==''):?><a class="button-secondary" href="/admin/reports.php">Limpiar</a><?php endif;?></form>
@@ -37,9 +37,9 @@ foreach ($details as $row) {
 <section class="panel table-wrap">
 <?php if ($people === []): ?><div class="empty-state"><h2>Todavía no hay horas registradas</h2><p>Los registros del equipo aparecerán aquí.</p></div>
 <?php else: ?><div class="report-tree">
-<?php foreach($people as $person):?><section class="person-report"><header><h2><?=e($person['name'])?></h2><strong><?=e(formatMinutes((int)$person['total']))?></strong></header>
-<?php foreach($person['clients'] as $client):?><div class="client-report"><div class="client-subtotal"><strong class="client-name" style="--client-color:<?=e($client['color'])?>"><i></i><?=e($client['name'])?></strong><span>Subtotal: <strong><?=e(formatMinutes((int)$client['total']))?></strong></span></div>
-<?php foreach($client['activities'] as $activity):?><div class="activity-row"><span><?=e($activity['name'])?></span><time datetime="<?=e($activity['date'])?>"><?=e(date('d/m/Y',strtotime((string)$activity['date'])))?></time><strong><?=e(formatMinutes((int)$activity['minutes']))?></strong></div><?php endforeach;?>
+<?php foreach($people as $reportUserId=>$person):?><section class="person-report"><header><h2><?=e($person['name'])?></h2><strong><?=e(formatMinutes((int)$person['total']))?></strong></header>
+<?php foreach($person['clients'] as $reportClientId=>$client):?><div class="client-report"><div class="client-subtotal"><strong class="client-name" style="--client-color:<?=e($client['color'])?>"><i></i><?=e($client['name'])?></strong><span>Subtotal: <strong><?=e(formatMinutes((int)$client['total']))?></strong></span></div>
+<?php foreach($client['activities'] as $activity):?><div class="activity-row"><button type="button" class="admin-inline-activity" data-user-id="<?=e($reportUserId)?>" data-client-id="<?=e($reportClientId)?>" data-date="<?=e($activity['date'])?>" data-activity="<?=e($activity['name'])?>" title="Hacé clic para editar"><?=e($activity['name'])?></button><time datetime="<?=e($activity['date'])?>"><?=e(date('d/m/Y',strtotime((string)$activity['date'])))?></time><strong><?=e(formatMinutes((int)$activity['minutes']))?></strong></div><?php endforeach;?>
 </div><?php endforeach;?></section><?php endforeach;?>
 </div><?php endif; ?>
-</section></main></body></html>
+</section></main><script src="/assets/js/admin-reports.js?v=1"></script></body></html>
