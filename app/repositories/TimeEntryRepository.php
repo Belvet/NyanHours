@@ -78,6 +78,22 @@ final class TimeEntryRepository
         return $statement->fetchAll();
     }
 
+    public function forClientPeriod(int $clientId, string $periodStart, string $periodEnd): array
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT user_id, work_date, SUM(duration_minutes) AS duration_minutes
+             FROM time_entries
+             WHERE client_id = :client_id AND work_date BETWEEN :period_start AND :period_end
+             GROUP BY user_id, work_date'
+        );
+        $statement->execute([
+            'client_id' => $clientId,
+            'period_start' => $periodStart,
+            'period_end' => $periodEnd,
+        ]);
+        return $statement->fetchAll();
+    }
+
     public function setTimesheetTotal(int $userId, int $clientId, string $date, int $desiredMinutes): void
     {
         $trackerStatement = $this->pdo->prepare(

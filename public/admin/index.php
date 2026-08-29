@@ -27,7 +27,7 @@ $counts = [
         <div class="stat"><strong><?= e($counts['clients']) ?></strong><span>Clientes</span></div>
         <div class="stat"><strong><?= e($counts['entries']) ?></strong><span>Registros</span></div>
     </div>
-    <section class="panel"><h2>Gestión</h2><p>Administrá las cuentas del equipo y los clientes disponibles para registrar horas.</p><div class="actions"><a class="button" href="/admin/users/">Administrar usuarios</a><a class="button" href="/admin/clients/">Administrar clientes</a><a class="button-secondary" href="/admin/reports.php">Resumen de horas</a></div></section>
+    <section class="panel"><h2>Gestión</h2><p>Administrá las cuentas del equipo y los clientes disponibles para registrar horas.</p><div class="actions"><a class="button" href="/admin/users/">Administrar usuarios</a><a class="button" href="/admin/clients/">Administrar clientes</a><a class="button-secondary" href="/admin/team-timesheet.php">Planilla de equipo</a><a class="button-secondary" href="/admin/reports.php">Resumen de horas</a></div></section>
 </main>
 </body>
 </html>

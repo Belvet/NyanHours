@@ -62,6 +62,6 @@ $flashes = consumeFlashes();
     </section>
     <aside class="login-art" aria-hidden="true"><div><span>TIME TO CREATE</span><strong>Track the work.<br>Keep the magic.</strong></div><img src="/assets/img/nyansei-mascot-hi.png" alt=""></aside>
     </main>
-    <script src="/assets/js/i18n.js?v=2" defer></script>
+    <script src="/assets/js/i18n.js?v=3" defer></script>
 </body>
 </html>

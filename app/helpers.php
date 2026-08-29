@@ -67,6 +67,7 @@ function renderSidebar(array $user): void
         $links[] = ['/admin/', '◇', 'Administración'];
         $links[] = ['/admin/users/', '♙', 'Usuarios'];
         $links[] = ['/admin/clients/', '●', 'Clientes'];
+        $links[] = ['/admin/team-timesheet.php', '▦', 'Planilla de equipo'];
         $links[] = ['/admin/reports.php', '▥', 'Reportes'];
     }
     ?>
@@ -89,6 +90,6 @@ function renderSidebar(array $user): void
             <form method="post" action="/logout.php"><?= csrfField() ?><button type="submit">Salir</button></form>
         </div>
     </aside>
-    <script src="/assets/js/i18n.js?v=2" defer></script>
+    <script src="/assets/js/i18n.js?v=3" defer></script>
     <?php
 }

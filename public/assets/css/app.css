@@ -103,6 +103,8 @@ tfoot th { color: #18212f; font-size: 15px; }
 .date-filter label { margin: 0 0 7px; font-size: 13px; }
 .date-filter button, .date-filter .button-secondary { min-height: 43px; }
 .filter-summary { margin: -4px 0 18px; color: #667085; }
+.team-client-filter > div { min-width: min(420px, 55vw); }
+.selected-client { display: flex; align-items: center; margin: 4px 0 14px; padding: 0 4px; font-size: 18px; }
 .week-nav { display: flex; align-items: stretch; height: 42px; border: 1px solid #cbd3df; border-radius: 7px; background: #fff; overflow: hidden; }
 .week-nav a { width: 42px; display: grid; place-items: center; font-size: 24px; text-decoration: none; }
 .week-nav span { min-width: 190px; display: grid; place-items: center; padding: 0 14px; border-inline: 1px solid #e2e7ef; font-weight: 650; }
