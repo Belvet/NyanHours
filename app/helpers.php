@@ -90,6 +90,6 @@ function renderSidebar(array $user): void
             <form method="post" action="/logout.php"><?= csrfField() ?><button type="submit">Salir</button></form>
         </div>
     </aside>
-    <script src="/assets/js/i18n.js?v=4" defer></script>
+    <script src="/assets/js/i18n.js?v=5" defer></script>
     <?php
 }

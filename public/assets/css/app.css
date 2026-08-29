@@ -152,6 +152,9 @@ tfoot th { color: #18212f; font-size: 15px; }
 .person-report > header { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background: #e8edf3; }
 .person-report > header h2 { margin: 0; }
 .person-report > header > strong { font-size: 20px; }
+.report-client-actions { display: flex; align-items: center; justify-content: flex-end; gap: 14px; flex-wrap: wrap; }
+.report-client-actions > strong { font-size: 20px; }
+.report-export { padding: 8px 12px; font-size: 13px; }
 .client-report { padding: 0 20px; }
 .client-subtotal { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #e8ebf1; }
 .activity-row { display: grid; grid-template-columns: minmax(220px,1fr) 130px 100px; gap: 20px; align-items: center; padding: 12px 20px 12px 34px; border-bottom: 1px solid #f0f2f5; color: #4b5565; }

@@ -18,7 +18,9 @@ NyanHours is a lightweight time-tracking web application for small teams. It com
 - `ADMIN` and `OPERATOR` roles with server-side authorization.
 - User management, hourly rates, and account activation controls.
 - Active and inactive client management.
-- Reports grouped by team member, client, and activity.
+- Reports grouped by client, team member, and activity, with custom date ranges.
+- Editable team timesheet filtered by client.
+- Branded PDF exports with date, task, duration, period, and total hours.
 - CSRF protection, secure sessions, PDO, and password hashing.
 - Responsive interface with persistent sidebar navigation.
 - Spanish and English interface with a persistent language preference.
@@ -31,8 +33,9 @@ NyanHours is a lightweight time-tracking web application for small teams. It com
 | Database | MySQL 8 / Percona Server 8 / MariaDB 10.4+ |
 | Frontend | HTML5, CSS3, and vanilla JavaScript |
 | Data access | PDO with prepared statements |
+| PDF export | FPDF 1.9 (bundled) |
 
-The project does not require React, Vue, Laravel, Composer, or npm dependencies.
+The project does not require React, Vue, Laravel, Composer, or npm dependencies. FPDF is bundled so PDF exports also work on traditional shared hosting.
 
 ## Project structure
 
@@ -110,7 +113,6 @@ NyanHours is under active development. The current MVP includes authentication, 
 
 Planned improvements:
 
-- Advanced filters and custom date ranges.
 - Payment calculations based on hourly rates.
 - CSV export.
 - Monthly period closing and reopening.

@@ -67,6 +67,28 @@ final class TimeEntryRepository
         return $statement->fetchAll();
     }
 
+    public function reportForClient(int $clientId, ?string $dateFrom = null, ?string $dateTo = null): array
+    {
+        $where = 'te.client_id = :client_id';
+        $parameters = ['client_id' => $clientId];
+        if ($dateFrom !== null && $dateTo !== null) {
+            $where .= ' AND te.work_date BETWEEN :date_from AND :date_to';
+            $parameters['date_from'] = $dateFrom;
+            $parameters['date_to'] = $dateTo;
+        }
+        $statement = $this->pdo->prepare(
+            "SELECT te.work_date,
+                    COALESCE(NULLIF(TRIM(te.description), ''), 'Sin actividad') AS activity,
+                    SUM(te.duration_minutes) AS total_minutes
+             FROM time_entries te
+             WHERE $where
+             GROUP BY te.work_date, COALESCE(NULLIF(TRIM(te.description), ''), 'Sin actividad')
+             ORDER BY te.work_date ASC, activity ASC"
+        );
+        $statement->execute($parameters);
+        return $statement->fetchAll();
+    }
+
     public function forWeek(int $userId, string $weekStart, string $weekEnd): array
     {
         $statement = $this->pdo->prepare(
