@@ -38,6 +38,11 @@
             if (original.title !== null) element.setAttribute('title',language==='en'?(en[original.title]||original.title):original.title);
         });
         document.querySelectorAll('[data-language]').forEach((button)=>button.classList.toggle('active',button.dataset.language===language));
+        document.querySelectorAll('.report-export').forEach((link) => {
+            const url = new URL(link.href, window.location.origin);
+            url.searchParams.set('lang', language);
+            link.href = url.pathname + url.search;
+        });
         localStorage.setItem('nyanhours_language',language);
     };
     document.addEventListener('click',(event)=>{const button=event.target.closest('[data-language]');if(button)apply(button.dataset.language);});

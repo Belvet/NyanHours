@@ -12,6 +12,10 @@ if ($client === null) {
     http_response_code(404);
     exit('Cliente no encontrado.');
 }
+$language = ($_GET['lang'] ?? 'es') === 'en' ? 'en' : 'es';
+$labels = $language === 'en'
+    ? ['title'=>'Detailed Time Report','total'=>'Total Time','task'=>'TASK','duration'=>'DURATION','day'=>'DAY','subtotal'=>'Subtotal','empty'=>'No activity','filename'=>'detailed_report']
+    : ['title'=>'Reporte detallado de horas','total'=>'Tiempo total','task'=>'TAREA','duration'=>'DURACIÓN','day'=>'DÍA','subtotal'=>'Subtotal','empty'=>'Sin actividad','filename'=>'reporte_detallado'];
 
 $dateFrom = trim((string) ($_GET['date_from'] ?? ''));
 $dateTo = trim((string) ($_GET['date_to'] ?? ''));
@@ -51,6 +55,8 @@ final class NyanHoursReportPdf extends FPDF
     public string $period = '';
     public string $total = '';
     public string $logoPath = '';
+    /** @var array<string,string> */
+    public array $labels = [];
 
     public function Header(): void
     {
@@ -68,7 +74,7 @@ final class NyanHoursReportPdf extends FPDF
         if (is_file($this->logoPath)) $this->Image($this->logoPath, 149, 14, 45);
         $this->SetY(42);
         $this->SetFont('Helvetica', '', 11);
-        $this->Cell(28, 7, 'Total Time', 0, 0);
+        $this->Cell(28, 7, $this->labels['total'], 0, 0);
         $this->SetFont('Helvetica', 'B', 12);
         $this->Cell(40, 7, $this->total, 0, 1);
         $this->Ln(8);
@@ -89,8 +95,8 @@ final class NyanHoursReportPdf extends FPDF
         $this->SetTextColor(255, 255, 255);
         $this->SetDrawColor(220, 216, 229);
         $this->SetFont('Helvetica', 'B', 9);
-        $this->Cell(155, 9, 'TASK', 1, 0, 'L', true);
-        $this->Cell(35, 9, 'DURATION', 1, 1, 'R', true);
+        $this->Cell(155, 9, $this->labels['task'], 1, 0, 'L', true);
+        $this->Cell(35, 9, $this->labels['duration'], 1, 1, 'R', true);
     }
 
     public function dayHeader(string $date, string $subtotal): void
@@ -100,8 +106,8 @@ final class NyanHoursReportPdf extends FPDF
         $this->SetTextColor(72, 65, 143);
         $this->SetDrawColor(205, 199, 221);
         $this->SetFont('Helvetica', 'B', 9);
-        $this->Cell(145, 9, 'DIA ' . $date, 1, 0, 'L', true);
-        $this->Cell(45, 9, 'Subtotal: ' . $subtotal, 1, 1, 'R', true);
+        $this->Cell(145, 9, $this->labels['day'] . ' ' . $date, 1, 0, 'L', true);
+        $this->Cell(45, 9, $this->labels['subtotal'] . ': ' . $subtotal, 1, 1, 'R', true);
     }
 
     public function reportRow(string $task, string $duration, bool $alternate): void
@@ -174,7 +180,8 @@ $pdf = new NyanHoursReportPdf('P', 'mm', 'A4');
 $pdf->AliasNbPages();
 $pdf->SetMargins(10, 12, 10);
 $pdf->SetAutoPageBreak(true, 18);
-$pdf->reportTitle = $pdfText('Detailed Time Report - ' . (string) $client['name']);
+$pdf->labels = array_map($pdfText, $labels);
+$pdf->reportTitle = $pdfText($labels['title'] . ' - ' . (string) $client['name']);
 $pdf->period = date('d/m/Y', strtotime($dateFrom)) . ' - ' . date('d/m/Y', strtotime($dateTo));
 $pdf->total = $formatPdfDuration($totalMinutes);
 $pdf->logoPath = dirname(__DIR__) . '/assets/img/nyansei-logo.png';
@@ -189,11 +196,11 @@ foreach (array_values(array_reduce($entries, static function (array $days, array
     $pdf->dayHeader(date('d/m/Y', strtotime((string) $dayEntries[0]['work_date'])), $formatPdfDuration($dayMinutes));
     foreach ($dayEntries as $index => $entry) {
         $pdf->reportRow(
-            $pdfText((string) $entry['activity']),
+            $pdfText((string) $entry['activity'] === 'Sin actividad' ? $labels['empty'] : (string) $entry['activity']),
             $formatPdfDuration((int) $entry['total_minutes']),
             $index % 2 === 1
         );
     }
 }
 $safeClient = preg_replace('/[^A-Za-z0-9_-]+/', '_', iconv('UTF-8', 'ASCII//TRANSLIT', (string) $client['name']) ?: 'client');
-$pdf->Output('D', 'detailed_report_' . trim((string) $safeClient, '_') . '.pdf');
+$pdf->Output('D', $labels['filename'] . '_' . trim((string) $safeClient, '_') . '.pdf');
