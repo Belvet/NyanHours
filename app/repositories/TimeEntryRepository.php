@@ -61,7 +61,7 @@ final class TimeEntryRepository
              $where
              GROUP BY u.id, u.name, c.id, c.name, c.color, te.work_date,
                       COALESCE(NULLIF(TRIM(te.description), ''), 'Sin actividad')
-             ORDER BY u.name, c.name, te.work_date DESC, activity"
+             ORDER BY c.name, u.name, te.work_date DESC, activity"
         );
         $statement->execute($parameters);
         return $statement->fetchAll();
