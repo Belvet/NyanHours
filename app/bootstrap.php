@@ -31,6 +31,7 @@ require_once __DIR__ . '/csrf.php';
 require_once __DIR__ . '/repositories/UserRepository.php';
 require_once __DIR__ . '/repositories/ClientRepository.php';
 require_once __DIR__ . '/repositories/TimeEntryRepository.php';
+require_once __DIR__ . '/repositories/ProfitabilityRepository.php';
 require_once __DIR__ . '/auth.php';
 
 $database = $config['database'];

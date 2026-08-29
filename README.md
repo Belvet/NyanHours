@@ -15,12 +15,20 @@ NyanHours is a lightweight time-tracking web application for small teams. It com
 - Smart duration parsing: `130`, `1:3`, and `1.5` are normalized to `1:30`.
 - Automatic synchronization between Timesheet and Time Tracker.
 - Custom color identification for each client.
-- `ADMIN` and `OPERATOR` roles with server-side authorization.
+- `OWNER`, `ADMIN`, and `OPERATOR` roles with server-side authorization.
 - User management, hourly rates, and account activation controls.
 - Active and inactive client management.
 - Reports grouped by client, team member, and activity, with custom date ranges.
 - Editable team timesheet filtered by client.
 - Branded PDF exports with date, task, duration, period, and total hours.
+- Profitability reporting by client with billing, labor cost, and net profit.
+- Owner work has zero labor cost, so its entire billed amount is reported as profit.
+- Team payment summary by employee and date range.
+- A database-enforced single `OWNER` account defines owner profitability.
+- All application tables use the `nh_` prefix so NyanHours can safely share a database with WordPress.
+- Ownership can be transferred safely; profitability and team payments are restricted to the current `OWNER`.
+- Owner-work snapshots preserve historical profitability after an ownership transfer.
+- Historical hourly-rate snapshots so later rate changes do not alter previous periods.
 - CSRF protection, secure sessions, PDO, and password hashing.
 - Responsive interface with persistent sidebar navigation.
 - Spanish and English interface with a persistent language preference.
@@ -85,8 +93,25 @@ Complete the copied file with your local database settings. `config/config.local
 ### 3. Create the first administrator
 
 ```powershell
-php database/seed-admin.php admin@example.com "a-secure-password" "Administrator"
+php database/seed-admin.php admin "a-secure-password" "Administrator"
 ```
+
+Alternatively, load the complete public demo dataset:
+
+```powershell
+php database/reset-demo.php --confirm
+php database/replace-sample-entries.php --confirm
+```
+
+### Demo accounts
+
+The demo reset script creates these fictional accounts. These credentials are public and must never be used in production.
+
+| Role | Username | Password |
+| --- | --- | --- |
+| Owner | `user1` | `DemoOwner2026!` |
+| Admin | `user2` | `DemoAdmin2026!` |
+| Operator | `user3` | `DemoOperator2026!` |
 
 ### 4. Run the application
 
@@ -113,7 +138,6 @@ NyanHours is under active development. The current MVP includes authentication, 
 
 Planned improvements:
 
-- Payment calculations based on hourly rates.
 - CSV export.
 - Monthly period closing and reopening.
 - Automated tests.

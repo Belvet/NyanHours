@@ -62,20 +62,24 @@ function renderSidebar(array $user): void
         ['/dashboard.php', '⌂', 'Mi panel'],
         ['/time-tracker.php', '◷', 'Time Tracker'],
         ['/timesheet.php', '▦', 'Timesheet'],
+        ['/change-password.php', '●', 'Cambiar contraseña'],
     ];
-    if (($user['role'] ?? '') === 'admin') {
-        $links[] = ['/admin/', '◇', 'Administración'];
+    if (in_array(($user['role'] ?? ''), ['admin', 'owner'], true)) {
         $links[] = ['/admin/users/', '♙', 'Usuarios'];
         $links[] = ['/admin/clients/', '●', 'Clientes'];
         $links[] = ['/admin/team-timesheet.php', '▦', 'Planilla de equipo'];
         $links[] = ['/admin/reports.php', '▥', 'Reportes'];
+        if (($user['role'] ?? '') === 'owner') {
+            $links[] = ['/admin/profitability.php', '$', 'Rentabilidad'];
+            $links[] = ['/admin/team-payments.php', '$', 'Pagos al equipo'];
+        }
     }
     ?>
     <aside class="app-sidebar">
         <a class="sidebar-logo" href="/dashboard.php" aria-label="NyanHours"><img src="/assets/img/nyansei-logo.png" alt="Nyansei Studio"><span>NyanHours</span></a>
         <nav class="sidebar-nav" aria-label="Navegación principal">
             <?php foreach ($links as [$href, $icon, $label]):
-                $active = $href === '/admin/' ? $path === '/admin/' : ($href === '/dashboard.php' ? $path === $href : str_starts_with($path, $href));
+                $active = $href === '/dashboard.php' ? $path === $href : str_starts_with($path, $href);
             ?>
                 <a href="<?= e($href) ?>" class="sidebar-link <?= $active ? 'active' : '' ?>">
                     <span class="sidebar-icon" aria-hidden="true"><?= e($icon) ?></span><span><?= e($label) ?></span>
@@ -86,10 +90,10 @@ function renderSidebar(array $user): void
             <button type="button" data-language="es">ES</button><button type="button" data-language="en">EN</button>
         </div>
         <div class="sidebar-user">
-            <div><strong><?= e($user['name'] ?? '') ?></strong><small><?= ($user['role'] ?? '') === 'admin' ? 'ADMIN' : 'OPERADOR' ?></small></div>
+            <div><strong><?= e($user['name'] ?? '') ?></strong><small><?= strtoupper((string)($user['role'] ?? 'operator')) ?></small></div>
             <form method="post" action="/logout.php"><?= csrfField() ?><button type="submit">Salir</button></form>
         </div>
     </aside>
-    <script src="/assets/js/i18n.js?v=6" defer></script>
+    <script src="/assets/js/i18n.js?v=16" defer></script>
     <?php
 }

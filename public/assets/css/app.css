@@ -162,10 +162,39 @@ tfoot th { color: #18212f; font-size: 15px; }
 .admin-inline-activity { width: 100%; padding: 7px 9px; border: 1px solid transparent; background: transparent; color: #4b5565; text-align: left; font-weight: 650; }
 .admin-inline-activity:hover { border-color: #cbd3df; background: #f7f8fb; color: var(--purple); box-shadow: none; transform: none; }
 .admin-activity-input { width: 100%; }
+.finance-stats { grid-template-columns: repeat(5,1fr); }
+.finance-stats .stat strong { font-size: 25px; }
+.total-earned-stat { border-color: rgba(93,86,173,.38); background: linear-gradient(135deg,#f7f4ff,#e9e2ff); }
+.total-earned-stat strong { color: var(--purple); }
+.total-earned-stat small { display: block; margin-top: 5px; color: #716b82; }
+.total-earned-stat.is-negative strong { color: #b42323; }
+.profit-stat { border-color: rgba(39,174,96,.28); background: linear-gradient(135deg,#fff,#edf9f1); }
+.profit-stat strong, .client-profit strong { color: #168146; }
+.profit-stat.is-negative, .client-profit.is-negative { border-color: rgba(197,53,53,.25); }
+.profit-stat.is-negative strong, .client-profit.is-negative strong { color: #b42323; }
+.profitability-list { display: grid; gap: 22px; }
+.profitability-section-heading { margin-top: 36px; margin-bottom: 16px; }
+.profitability-section-heading h2 { margin-bottom: 4px; }
+.section-total { color: var(--purple); font-size: 24px; }
+.owner-work-card { border-color: #d9cef6; }
+.owner-work-card > header { background: linear-gradient(110deg,#fff,#eee8ff); }
+.owner-work-card .profit-metrics { grid-template-columns: repeat(2,1fr); }
+.owner-transfer-panel { margin-top: 24px; border-color: rgba(197,53,53,.22); }
+.profitability-card { margin-top: 0; padding: 0; overflow: hidden; }
+.profitability-card > header { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 20px 24px; background: linear-gradient(110deg,#fff,var(--lavender)); }
+.profitability-card h2 { margin-bottom: 3px; }
+.client-profit { min-width: 180px; padding: 12px 16px; border-radius: 12px; background: rgba(255,255,255,.78); text-align: right; }
+.client-profit small, .client-profit strong { display: block; }
+.client-profit strong { margin-top: 3px; font-size: 22px; }
+.profit-metrics { display: grid; grid-template-columns: repeat(3,1fr); border-block: 1px solid #ebe7f0; }
+.profit-metrics > div { padding: 16px 24px; border-right: 1px solid #ebe7f0; }
+.profit-metrics > div:last-child { border-right: 0; }
+.profit-metrics span, .profit-metrics strong { display: block; }
+.profit-metrics span { margin-bottom: 4px; color: #667085; font-size: 12px; text-transform: uppercase; }
 .activity-row time { color: #667085; font-variant-numeric: tabular-nums; }
 .activity-row > strong { text-align: right; }
-@media (max-width: 1050px) { .entry-card { grid-template-columns: repeat(2, 1fr); } .entry-description, .entry-client { grid-column: span 2; } .time-separator { display: none; } .entry-duration { border-left: 0; background: #eeecff; border-radius: 8px; } }
+@media (max-width: 1050px) { .finance-stats { grid-template-columns: repeat(2,1fr); } .entry-card { grid-template-columns: repeat(2, 1fr); } .entry-description, .entry-client { grid-column: span 2; } .time-separator { display: none; } .entry-duration { border-left: 0; background: #eeecff; border-radius: 8px; } }
 @media (max-width: 950px) { .tracker-entry { grid-template-columns: repeat(2, 1fr); } .tracker-activity { grid-column: span 2; } }
 @media (max-width: 760px) { .login-page { padding: 18px; } .login-shell { min-height: 0; grid-template-columns: 1fr; } .login-card { padding: 38px 30px; } .login-art { display: none; } }
 @media (max-width: 700px) { .app-layout { padding-left: 0; padding-top: 66px; } .app-sidebar { inset: 0 0 auto; width: 100%; height: 66px; padding: 8px 118px 8px 10px; flex-direction: row; align-items: center; } .sidebar-logo { padding: 0 6px; order: 2; white-space: nowrap; } .sidebar-logo img { width: 76px; } .sidebar-logo span { display: none; } .sidebar-nav { flex: 1; flex-direction: row; overflow-x: auto; gap: 3px; } .sidebar-link { flex: 0 0 auto; padding: 10px; } .sidebar-link span:last-child { display: none; } .sidebar-link:hover { transform: translateY(-2px); } .sidebar-user { display: none; } .language-switcher { top: 9px; right: 10px; } .language-switcher button { min-width: 38px; padding: 7px 8px; } }
-@media (max-width: 640px) { .topbar, .page-heading, .timesheet-heading { align-items: flex-start; gap: 14px; } .page-heading, .timesheet-heading { flex-direction: column; } .dashboard-heading { min-height: 210px; padding: 24px 110px 24px 24px; } .dashboard-heading > img { right: -6px; width: 118px; } .user-menu { align-items: flex-end; flex-direction: column; gap: 8px; } .stats, .form-grid, .entry-card, .tracker-entry, .tracker-event { grid-template-columns: 1fr; } .field-full, .entry-description, .entry-client, .tracker-activity { grid-column: auto; } .entry-submit button, .tracker-entry button { width: 100%; } .week-nav { width: 100%; } .week-nav span { flex: 1; } .date-filter { align-items: stretch; flex-direction: column; } .date-filter > div { min-width: 0; } .timesheet-actions { align-items: stretch; flex-direction: column; } .tracker-duration { text-align: left; } .activity-row { grid-template-columns: 1fr auto; gap: 6px 14px; } .activity-row time { grid-column: 1; } .activity-row > strong { grid-column: 2; grid-row: 1 / span 2; } }
+@media (max-width: 640px) { .topbar, .page-heading, .timesheet-heading { align-items: flex-start; gap: 14px; } .page-heading, .timesheet-heading { flex-direction: column; } .dashboard-heading { min-height: 210px; padding: 24px 110px 24px 24px; } .dashboard-heading > img { right: -6px; width: 118px; } .user-menu { align-items: flex-end; flex-direction: column; gap: 8px; } .stats, .form-grid, .entry-card, .tracker-entry, .tracker-event { grid-template-columns: 1fr; } .field-full, .entry-description, .entry-client, .tracker-activity { grid-column: auto; } .entry-submit button, .tracker-entry button { width: 100%; } .week-nav { width: 100%; } .week-nav span { flex: 1; } .date-filter { align-items: stretch; flex-direction: column; } .date-filter > div { min-width: 0; } .timesheet-actions { align-items: stretch; flex-direction: column; } .tracker-duration { text-align: left; } .activity-row { grid-template-columns: 1fr auto; gap: 6px 14px; } .activity-row time { grid-column: 1; } .activity-row > strong { grid-column: 2; grid-row: 1 / span 2; } .profitability-card > header { align-items: stretch; flex-direction: column; } .client-profit { text-align: left; } .profit-metrics { grid-template-columns: 1fr; } .profit-metrics > div { border-right: 0; border-bottom: 1px solid #ebe7f0; } }

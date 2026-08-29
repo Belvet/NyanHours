@@ -28,7 +28,7 @@ foreach ($details as $row) {
 }
 ?>
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="csrf-token" content="<?=e(csrfToken())?>"><title>Resumen de horas | NyanHours</title><link rel="stylesheet" href="/assets/css/app.css"></head><body class="app-layout"><?php renderSidebar($user); ?>
-<header class="topbar"><a class="brand" href="/dashboard.php">NyanHours</a><a class="button-secondary" href="/admin/">Administración</a></header>
+<header class="topbar"><a class="brand" href="/dashboard.php">NyanHours</a></header>
 <main class="container"><div class="page-heading"><div><h1>Resumen de horas</h1><p class="muted">Tiempo acumulado por cliente, usuario y actividad.</p></div></div>
 <form class="panel date-filter" method="get"><div><label for="date_from">Desde</label><input id="date_from" name="date_from" type="date" value="<?=e($dateFrom)?>"></div><div><label for="date_to">Hasta</label><input id="date_to" name="date_to" type="date" value="<?=e($dateTo)?>"></div><button type="submit">Filtrar</button><?php if($dateFrom!==''||$dateTo!==''):?><a class="button-secondary" href="/admin/reports.php">Limpiar</a><?php endif;?></form>
 <?php foreach($filterErrors as $error):?><div class="alert alert-error"><?=e($error)?></div><?php endforeach;?>

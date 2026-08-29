@@ -9,22 +9,22 @@ if (currentUser($pdo) !== null) {
     redirect('/dashboard.php');
 }
 
-$email = '';
+$username = '';
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     requireValidCsrf();
-    $email = strtolower(trim((string) ($_POST['email'] ?? '')));
+    $username = strtolower(trim((string) ($_POST['username'] ?? '')));
     $password = (string) ($_POST['password'] ?? '');
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
-        $error = 'Ingresá un email y una contraseña válidos.';
+    if (!preg_match('/^[a-z0-9._-]{3,50}$/', $username) || $password === '') {
+        $error = 'Ingresá un usuario y una contraseña válidos.';
     } else {
-        $user = (new UserRepository($pdo))->findByEmail($email);
+        $user = (new UserRepository($pdo))->findByUsername($username);
         $dummyHash = '$2y$12$usesomesillystringfore7hnbRJHxXVLeakoG8K30oukPsA.ztMG';
         $validPassword = password_verify($password, $user === null ? $dummyHash : (string) $user['password_hash']);
 
         if ($user === null || !$validPassword || !(bool) $user['active']) {
-            $error = 'El email o la contraseña no son correctos.';
+            $error = 'El usuario o la contraseña no son correctos.';
         } else {
             loginUser((int) $user['id']);
             redirect('/dashboard.php');
@@ -53,8 +53,8 @@ $flashes = consumeFlashes();
     <?php if ($error !== null): ?><div class="alert alert-error"><?= e($error) ?></div><?php endif; ?>
     <form method="post" action="/login.php">
         <?= csrfField() ?>
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" value="<?= e($email) ?>" autocomplete="username" required autofocus>
+        <label for="username">Usuario</label>
+        <input id="username" name="username" value="<?= e($username) ?>" minlength="3" maxlength="50" pattern="[A-Za-z0-9._-]+" autocomplete="username" required autofocus>
         <label for="password">Contraseña</label>
         <input id="password" name="password" type="password" autocomplete="current-password" required>
         <button type="submit">Ingresar</button>
@@ -62,6 +62,6 @@ $flashes = consumeFlashes();
     </section>
     <aside class="login-art" aria-hidden="true"><div><span>TIME TO CREATE</span><strong>Track the work.<br>Keep the magic.</strong></div><img src="/assets/img/nyansei-mascot-hi.png" alt=""></aside>
     </main>
-    <script src="/assets/js/i18n.js?v=6" defer></script>
+    <script src="/assets/js/i18n.js?v=16" defer></script>
 </body>
 </html>

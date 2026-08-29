@@ -27,9 +27,19 @@ function requireLogin(PDO $pdo): array
 function requireAdmin(PDO $pdo): array
 {
     $user = requireLogin($pdo);
-    if ($user['role'] !== 'admin') {
+    if (!in_array($user['role'], ['admin', 'owner'], true)) {
         http_response_code(403);
         exit('No tenés permisos para acceder a esta sección.');
+    }
+    return $user;
+}
+
+function requireOwner(PDO $pdo): array
+{
+    $user = requireLogin($pdo);
+    if ($user['role'] !== 'owner') {
+        http_response_code(403);
+        exit('Solo OWNER puede acceder a esta sección.');
     }
     return $user;
 }

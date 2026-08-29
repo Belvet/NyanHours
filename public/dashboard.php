@@ -33,11 +33,11 @@ $flashes = consumeFlashes();
         <?php else: ?><table><thead><tr><th>Fecha</th><th>Cliente</th><th>Tiempo</th><th>Descripción</th></tr></thead><tbody>
         <?php foreach ($entries as $entry): ?><tr>
             <td><?= e(date('d/m/Y', strtotime((string) $entry['work_date']))) ?></td><td><strong class="client-name" style="--client-color:<?=e($entry['client_color'])?>"><i></i><?= e($entry['client_name']) ?></strong></td>
-            <td><strong><?= e(formatMinutes((int) $entry['total_minutes'])) ?></strong></td><td class="description-cell"><?= e($entry['description'] ?: '—') ?></td>
+            <td><strong><?= e(formatMinutes((int) $entry['total_minutes'])) ?></strong></td><td class="description-cell"><?= e($entry['description'] ?: 'No detallado') ?></td>
         </tr><?php endforeach; ?></tbody></table><?php endif; ?>
     </section>
-    <?php if ($user['role'] === 'admin'): ?>
-        <section class="panel"><h2>Administración</h2><p>Consultá todo el equipo, los clientes y los totales acumulados.</p><div class="actions"><a class="button" href="/admin/">Abrir panel administrativo</a><a class="button-secondary" href="/admin/reports.php">Ver resumen de horas</a></div></section>
+    <?php if (in_array($user['role'], ['admin','owner'], true)): ?>
+        <section class="panel"><h2>Administración</h2><p>Consultá todo el equipo, los clientes y los totales acumulados.</p><div class="actions"><a class="button" href="/admin/users/">Administrar usuarios</a><a class="button-secondary" href="/admin/reports.php">Ver resumen de horas</a></div></section>
     <?php endif; ?>
 </main>
 </body>

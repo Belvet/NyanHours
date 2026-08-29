@@ -14,8 +14,8 @@ if ($client === null) {
 }
 $language = ($_GET['lang'] ?? 'es') === 'en' ? 'en' : 'es';
 $labels = $language === 'en'
-    ? ['title'=>'Detailed Time Report','total'=>'Total Time','task'=>'TASK','duration'=>'DURATION','day'=>'DAY','subtotal'=>'Subtotal','empty'=>'No activity','filename'=>'detailed_report']
-    : ['title'=>'Reporte detallado de horas','total'=>'Tiempo total','task'=>'TAREA','duration'=>'DURACIÓN','day'=>'DÍA','subtotal'=>'Subtotal','empty'=>'Sin actividad','filename'=>'reporte_detallado'];
+    ? ['title'=>'Detailed Time Report','total'=>'Total Time','task'=>'TASK','duration'=>'DURATION','day'=>'DAY','subtotal'=>'Subtotal','empty'=>'Not detailed','filename'=>'detailed_report']
+    : ['title'=>'Reporte detallado de horas','total'=>'Tiempo total','task'=>'TAREA','duration'=>'DURACIÓN','day'=>'DÍA','subtotal'=>'Subtotal','empty'=>'No detallado','filename'=>'reporte_detallado'];
 
 $dateFrom = trim((string) ($_GET['date_from'] ?? ''));
 $dateTo = trim((string) ($_GET['date_to'] ?? ''));
@@ -196,7 +196,7 @@ foreach (array_values(array_reduce($entries, static function (array $days, array
     $pdf->dayHeader(date('d/m/Y', strtotime((string) $dayEntries[0]['work_date'])), $formatPdfDuration($dayMinutes));
     foreach ($dayEntries as $index => $entry) {
         $pdf->reportRow(
-            $pdfText((string) $entry['activity'] === 'Sin actividad' ? $labels['empty'] : (string) $entry['activity']),
+            $pdfText((string) $entry['activity'] === 'No detallado' ? $labels['empty'] : (string) $entry['activity']),
             $formatPdfDuration((int) $entry['total_minutes']),
             $index % 2 === 1
         );
