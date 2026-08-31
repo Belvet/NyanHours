@@ -8,14 +8,14 @@ final class ClientRepository
     public function all(): array
     {
         return $this->pdo->query(
-            'SELECT id, name, color, hourly_rate, active, created_at, updated_at FROM nh_clients ORDER BY active DESC, name ASC'
+            'SELECT id, name, billing_email, color, hourly_rate, active, created_at, updated_at FROM nh_clients ORDER BY active DESC, name ASC'
         )->fetchAll();
     }
 
     public function allActive(): array
     {
         return $this->pdo->query(
-            'SELECT id, name, color, hourly_rate FROM nh_clients WHERE active = 1 ORDER BY name ASC'
+            'SELECT id, name, billing_email, color, hourly_rate FROM nh_clients WHERE active = 1 ORDER BY name ASC'
         )->fetchAll();
     }
 
@@ -36,7 +36,7 @@ final class ClientRepository
     public function findById(int $id): ?array
     {
         $statement = $this->pdo->prepare(
-            'SELECT id, name, color, hourly_rate, active, created_at, updated_at FROM nh_clients WHERE id = :id LIMIT 1'
+            'SELECT id, name, billing_email, color, hourly_rate, active, created_at, updated_at FROM nh_clients WHERE id = :id LIMIT 1'
         );
         $statement->execute(['id' => $id]);
         $client = $statement->fetch();
@@ -45,23 +45,23 @@ final class ClientRepository
 
     public function findByName(string $name): ?array
     {
-        $statement = $this->pdo->prepare('SELECT id, name, color, hourly_rate, active FROM nh_clients WHERE name = :name LIMIT 1');
+        $statement = $this->pdo->prepare('SELECT id, name, billing_email, color, hourly_rate, active FROM nh_clients WHERE name = :name LIMIT 1');
         $statement->execute(['name' => $name]);
         $client = $statement->fetch();
         return $client === false ? null : $client;
     }
 
-    public function create(string $name, string $color, float $hourlyRate): int
+    public function create(string $name, ?string $billingEmail, string $color, float $hourlyRate): int
     {
-        $statement = $this->pdo->prepare('INSERT INTO nh_clients (name, color, hourly_rate, active) VALUES (:name, :color, :hourly_rate, 1)');
-        $statement->execute(['name' => $name, 'color' => $color, 'hourly_rate' => $hourlyRate]);
+        $statement = $this->pdo->prepare('INSERT INTO nh_clients (name, billing_email, color, hourly_rate, active) VALUES (:name, :billing_email, :color, :hourly_rate, 1)');
+        $statement->execute(['name' => $name, 'billing_email' => $billingEmail, 'color' => $color, 'hourly_rate' => $hourlyRate]);
         return (int) $this->pdo->lastInsertId();
     }
 
-    public function update(int $id, string $name, string $color, float $hourlyRate): void
+    public function update(int $id, string $name, ?string $billingEmail, string $color, float $hourlyRate): void
     {
-        $statement = $this->pdo->prepare('UPDATE nh_clients SET name = :name, color = :color, hourly_rate = :hourly_rate WHERE id = :id');
-        $statement->execute(['id' => $id, 'name' => $name, 'color' => $color, 'hourly_rate' => $hourlyRate]);
+        $statement = $this->pdo->prepare('UPDATE nh_clients SET name = :name, billing_email = :billing_email, color = :color, hourly_rate = :hourly_rate WHERE id = :id');
+        $statement->execute(['id' => $id, 'name' => $name, 'billing_email' => $billingEmail, 'color' => $color, 'hourly_rate' => $hourlyRate]);
         if ($hourlyRate > 0) {
             $backfill = $this->pdo->prepare(
                 'UPDATE nh_time_entries SET client_hourly_rate = :hourly_rate

@@ -76,7 +76,7 @@ function renderSidebar(array $user): void
     }
     ?>
     <aside class="app-sidebar">
-        <a class="sidebar-logo" href="/dashboard.php" aria-label="NyanHours"><img src="/assets/img/nyansei-logo.png" alt="Nyansei Studio"><span>NyanHours</span></a>
+        <a class="sidebar-logo" href="/dashboard.php" aria-label="NyanHours"><img src="/assets/img/nyanhours-logo.png" alt="NyanHours"></a>
         <nav class="sidebar-nav" aria-label="Navegación principal">
             <?php foreach ($links as [$href, $icon, $label]):
                 $active = $href === '/dashboard.php' ? $path === $href : str_starts_with($path, $href);
@@ -94,6 +94,6 @@ function renderSidebar(array $user): void
             <form method="post" action="/logout.php"><?= csrfField() ?><button type="submit">Salir</button></form>
         </div>
     </aside>
-    <script src="/assets/js/i18n.js?v=16" defer></script>
+    <script src="/assets/js/i18n.js?v=17" defer></script>
     <?php
 }

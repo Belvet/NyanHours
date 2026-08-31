@@ -3,7 +3,7 @@
 ![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?logo=javascript&logoColor=111)
-![Status](https://img.shields.io/badge/status-MVP-5046E5)
+![Version](https://img.shields.io/badge/version-0.2.0-5046E5)
 
 NyanHours is a lightweight time-tracking web application for small teams. It combines a weekly timesheet with detailed activity tracking, inspired by Clockify while remaining framework-free and easy to deploy on traditional PHP hosting.
 
@@ -21,6 +21,9 @@ NyanHours is a lightweight time-tracking web application for small teams. It com
 - Reports grouped by client, team member, and activity, with custom date ranges.
 - Editable team timesheet filtered by client.
 - Branded PDF exports with date, task, duration, period, and total hours.
+- Client invoice builder with editable line items, billing emails, and branded PDF output.
+- USD and EUR invoices with currency-specific payment instructions stored outside version control.
+- Conservative automatic grouping of similarly named invoice items.
 - Profitability reporting by client with billing, labor cost, and net profit.
 - Owner work has zero labor cost, so its entire billed amount is reported as profit.
 - Team payment summary by employee and date range.
@@ -32,6 +35,9 @@ NyanHours is a lightweight time-tracking web application for small teams. It com
 - CSRF protection, secure sessions, PDO, and password hashing.
 - Responsive interface with persistent sidebar navigation.
 - Spanish and English interface with a persistent language preference.
+- Locale-aware dates: `DD/MM/YYYY` in Spanish and `MM/DD/YYYY` in English.
+- Dashboard period filters covering hours, earnings, and recorded activities.
+- Password visibility controls and dedicated NyanHours application branding.
 
 ## Tech stack
 
@@ -134,14 +140,16 @@ Open [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
 ## Project status
 
-NyanHours is under active development. The current MVP includes authentication, roles, client management, weekly timesheets, detailed time tracking, inline editing, bilingual navigation, and administrative reports.
+NyanHours `v0.2.0` is under active development. The current release includes authentication, roles, client management, weekly timesheets, detailed time tracking, inline editing, bilingual navigation, administrative reports, profitability tools, team payments, and client invoices.
+
+See [CHANGELOG.md](CHANGELOG.md) for release history and upgrade notes.
 
 Planned improvements:
 
 - CSV export.
 - Monthly period closing and reopening.
 - Automated tests.
-- Deployment to traditional PHP-FPM hosting.
+- Automated deployment workflows for traditional PHP-FPM hosting.
 
 ## Author
 

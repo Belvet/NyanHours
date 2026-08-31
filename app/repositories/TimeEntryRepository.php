@@ -20,6 +20,21 @@ final class TimeEntryRepository
         return $statement->fetchAll();
     }
 
+    public function forUserBetween(int $userId, string $dateFrom, string $dateTo): array
+    {
+        $statement = $this->pdo->prepare(
+            "SELECT te.id, te.work_date, te.description,
+                    c.name AS client_name, c.color AS client_color,
+                    te.duration_minutes AS total_minutes
+             FROM nh_time_entries te
+             INNER JOIN nh_clients c ON c.id = te.client_id
+             WHERE te.user_id = :user_id AND te.work_date BETWEEN :date_from AND :date_to
+             ORDER BY te.work_date DESC, te.id DESC"
+        );
+        $statement->execute(['user_id' => $userId, 'date_from' => $dateFrom, 'date_to' => $dateTo]);
+        return $statement->fetchAll();
+    }
+
     public function totalMinutesForUser(int $userId): int
     {
         $statement = $this->pdo->prepare(
@@ -27,6 +42,18 @@ final class TimeEntryRepository
         );
         $statement->execute(['user_id' => $userId]);
         return (int) $statement->fetchColumn();
+    }
+
+    public function earningsForUserBetween(int $userId, string $dateFrom, string $dateTo): array
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT COALESCE(SUM(duration_minutes), 0) AS total_minutes,
+                    COALESCE(SUM(duration_minutes * user_hourly_rate) / 60, 0) AS total_earnings
+             FROM nh_time_entries
+             WHERE user_id = :user_id AND work_date BETWEEN :date_from AND :date_to'
+        );
+        $statement->execute(['user_id' => $userId, 'date_from' => $dateFrom, 'date_to' => $dateTo]);
+        return $statement->fetch() ?: ['total_minutes' => 0, 'total_earnings' => 0];
     }
 
     public function summaryByUserAndClient(): array

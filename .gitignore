@@ -1,5 +1,10 @@
 /config/config.local.php
 /storage/logs/*.log
+/storage/*.pid
+/tmp/
+/output/pdfs/*.pdf
+/storage/sessions/*
+!/storage/sessions/.gitkeep
 /.idea/
 /.vscode/
 /.git-paused/

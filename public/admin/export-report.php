@@ -48,6 +48,7 @@ $pdfText = static function (string $value): string {
     return $converted === false ? $value : $converted;
 };
 $formatPdfDuration = static fn (int $minutes): string => sprintf('%d h %02d min', intdiv($minutes, 60), $minutes % 60);
+$formatPdfDate = static fn (string $date): string => date($language === 'en' ? 'm/d/Y' : 'd/m/Y', strtotime($date));
 
 final class NyanHoursReportPdf extends FPDF
 {
@@ -182,7 +183,7 @@ $pdf->SetMargins(10, 12, 10);
 $pdf->SetAutoPageBreak(true, 18);
 $pdf->labels = array_map($pdfText, $labels);
 $pdf->reportTitle = $pdfText($labels['title'] . ' - ' . (string) $client['name']);
-$pdf->period = date('d/m/Y', strtotime($dateFrom)) . ' - ' . date('d/m/Y', strtotime($dateTo));
+$pdf->period = $formatPdfDate($dateFrom) . ' - ' . $formatPdfDate($dateTo);
 $pdf->total = $formatPdfDuration($totalMinutes);
 $pdf->logoPath = dirname(__DIR__) . '/assets/img/nyansei-logo.png';
 $pdf->SetTitle($pdf->reportTitle);
@@ -193,7 +194,7 @@ foreach (array_values(array_reduce($entries, static function (array $days, array
     return $days;
 }, [])) as $dayEntries) {
     $dayMinutes = array_sum(array_map(static fn (array $entry): int => (int) $entry['total_minutes'], $dayEntries));
-    $pdf->dayHeader(date('d/m/Y', strtotime((string) $dayEntries[0]['work_date'])), $formatPdfDuration($dayMinutes));
+    $pdf->dayHeader($formatPdfDate((string) $dayEntries[0]['work_date']), $formatPdfDuration($dayMinutes));
     foreach ($dayEntries as $index => $entry) {
         $pdf->reportRow(
             $pdfText((string) $entry['activity'] === 'No detallado' ? $labels['empty'] : (string) $entry['activity']),
